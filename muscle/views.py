@@ -7,9 +7,11 @@ from rest_framework.generics import (
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Muscle
+from app.permissions import IsAdminOrReadyOnly
 
 
 class MuscleCreateListView(ListCreateAPIView):
+    permission_classes = (IsAdminOrReadyOnly,)
     queryset = Muscle.objects.all()
     serializer_class = MuscleSerializer
 
@@ -22,6 +24,7 @@ class MuscleCreateListView(ListCreateAPIView):
 
 
 class MuscleRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAdminOrReadyOnly,)
     queryset = Muscle.objects.all()
     serializer_class = MuscleSerializer
 

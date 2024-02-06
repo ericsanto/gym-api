@@ -10,9 +10,11 @@ from .serializers import (
 )
 from rest_framework.response import Response
 from rest_framework import status
+from app.permissions import IsAdminOrReadyOnly
 
 
 class ExerciseCreateListView(ListCreateAPIView):
+    permission_classes = (IsAdminOrReadyOnly,)
     queryset = Exercise.objects.all()
     serializer_class = ExerciseSerializer
 
@@ -30,6 +32,7 @@ class ExerciseCreateListView(ListCreateAPIView):
 
 
 class ExerciseRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAdminOrReadyOnly,)
     queryset = Exercise.objects.all()
     serializer_class = ExerciseSerializer
 

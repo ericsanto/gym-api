@@ -4,7 +4,10 @@ from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
 )
 from .models import Exercise
-from .serializers import ExerciseSerializer
+from .serializers import (
+    ExerciseSerializer,
+    ExerciseListStyleSerializer
+)
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -13,7 +16,12 @@ class ExerciseCreateListView(ListCreateAPIView):
     queryset = Exercise.objects.all()
     serializer_class = ExerciseSerializer
 
-    def create(self, request, *args, **kwargs):
+    def get_serializer_class(self) -> None:
+        if self.request.method == 'GET':
+            return ExerciseListStyleSerializer
+        return ExerciseSerializer
+
+    def create(self, request, *args, **kwargs) -> None:
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -25,7 +33,7 @@ class ExerciseRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     queryset = Exercise.objects.all()
     serializer_class = ExerciseSerializer
 
-    def destroy(self, request, *args, **kwargs):
+    def destroy(self, request, *args, **kwargs) -> None:
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT, data={"message": "Item excluído com sucesso"})

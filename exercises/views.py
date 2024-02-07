@@ -3,13 +3,15 @@ from rest_framework.generics import (
     ListCreateAPIView,
     RetrieveUpdateDestroyAPIView,
 )
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
+from rest_framework.response import Response
+from rest_framework import status
 from .models import Exercise
 from .serializers import (
     ExerciseSerializer,
     ExerciseListStyleSerializer
 )
-from rest_framework.response import Response
-from rest_framework import status
 from app.permissions import IsAdminOrReadyOnly
 
 
@@ -17,6 +19,9 @@ class ExerciseCreateListView(ListCreateAPIView):
     permission_classes = (IsAdminOrReadyOnly,)
     queryset = Exercise.objects.all()
     serializer_class = ExerciseSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['activated_muscle']
+    search_fields = ['name']
 
     def get_serializer_class(self) -> None:
         if self.request.method == 'GET':

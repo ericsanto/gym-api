@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include('exercises.urls')),
     path('api/v1/', include('muscle.urls')),
+    path('api/v1/', include('authentication.urls')),
 ]

@@ -14,6 +14,7 @@ from .serializers import (
 )
 from app.permissions import IsAdminOrReadyOnly
 from django.db.models import Count
+from muscle.models import Muscle
 
 
 class ExerciseCreateListView(ListCreateAPIView):
@@ -59,10 +60,13 @@ class ExerciceStatsView(APIView):
         try:
             if request.method == 'GET':
                 total_exercise = self.queryset.count()
+                total_muscle = Muscle.objects.all().count()
                 exercises_by_muscle = self.queryset.values(
-                    'activated_muscle__name').annotate(count=Count('id'))
+                    'activated_muscle__name').annotate(number_of_muscle_recruiting_exercises=Count('id'))
                 return Response(data={'Total de Exercícios cadastrados': total_exercise,
-                                      'Total de exercícios por músculos': exercises_by_muscle},
+                                      'Total de Músculos cadastrados': total_muscle,
+                                      'Total de exercícios por músculos': exercises_by_muscle,
+                                      },
                                 status=status.HTTP_200_OK)
         except Exception as e:
             return Response(data={'message': f'Erro ao carregar dados {str(e)}'},

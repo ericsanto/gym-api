@@ -62,10 +62,14 @@ class ExerciceStatsView(APIView):
                 total_exercise = self.queryset.count()
                 total_muscle = Muscle.objects.all().count()
                 exercises_by_muscle = self.queryset.values(
-                    'activated_muscle__name').annotate(number_of_muscle_recruiting_exercises=Count('id'))
-                return Response(data={'Total de Exercícios cadastrados': total_exercise,
-                                      'Total de Músculos cadastrados': total_muscle,
-                                      'Total de exercícios por músculos': exercises_by_muscle,
+                    'activated_muscle__name').annotate(
+                    number_of_muscle_recruiting_exercises=Count('id'))
+                return Response(data={'Total de Exercícios cadastrados':
+                                      total_exercise,
+                                      'Total de Músculos cadastrados':
+                                      total_muscle,
+                                      'Total de exercícios por músculos':
+                                      exercises_by_muscle,
                                       },
                                 status=status.HTTP_200_OK)
         except Exception as e:

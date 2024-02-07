@@ -2,8 +2,9 @@ from django.urls import path
 from .views import (
     ExerciseCreateListView,
     ExerciseRetrieveUpdateDestroyView,
-    ExerciceStatsView
+    ExerciceStatsView,
 )
+
 
 urlpatterns = [
     path('exercise/', ExerciseCreateListView.as_view(),

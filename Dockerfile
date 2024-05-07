@@ -1,14 +1,13 @@
+FROM python:3.12
 
+WORKDIR /usr/src/app
 
-FROM python:3.11-alpine3.18
+RUN apt-get update -y && \
+    apt-get upgrade -y
 
-WORKDIR /app
+COPY requirements.txt .
 
-COPY requirements.txt /app/
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt 
 
-RUN pip install -r requirements.txt
-
-COPY . /app/
-
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-
+COPY . .

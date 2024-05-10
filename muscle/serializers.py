@@ -6,4 +6,4 @@ class MuscleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Muscle
-        fields = '__all__'
+        fields = "__all__"

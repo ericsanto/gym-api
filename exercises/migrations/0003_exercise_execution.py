@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exercises', '0002_exercise_activated_muscle'),
+        ("exercises", "0002_exercise_activated_muscle"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='exercise',
-            name='execution',
+            model_name="exercise",
+            name="execution",
             field=models.URLField(blank=True, null=True),
         ),
     ]

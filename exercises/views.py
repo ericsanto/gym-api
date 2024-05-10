@@ -10,7 +10,7 @@ from rest_framework import status
 from .models import Exercise
 from .serializers import (
     ExerciseSerializer,
-    ExerciseListStyleSerializer
+    ExerciseListStyleSerializer,
 )
 from app.permissions import IsAdminOrReadyOnly
 from django.db.models import Count
@@ -22,11 +22,11 @@ class ExerciseCreateListView(ListCreateAPIView):
     queryset = Exercise.objects.all()
     serializer_class = ExerciseSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = ['activated_muscle']
-    search_fields = ['name']
+    filterset_fields = ["activated_muscle"]
+    search_fields = ["name"]
 
     def get_serializer_class(self) -> None:
-        if self.request.method == 'GET':
+        if self.request.method == "GET":
             return ExerciseListStyleSerializer
         return ExerciseSerializer
 
@@ -35,10 +35,11 @@ class ExerciseCreateListView(ListCreateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return Response(data=({"message": "Exercício criado com sucesso!"},
-                              serializer.data),
-                        status=status.HTTP_201_CREATED,
-                        headers=headers)
+        return Response(
+            data=({"message": "Exercício criado com sucesso!"}, serializer.data),
+            status=status.HTTP_201_CREATED,
+            headers=headers,
+        )
 
 
 class ExerciseRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
@@ -49,8 +50,10 @@ class ExerciseRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     def destroy(self, request, *args, **kwargs) -> None:
         instance = self.get_object()
         self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT,
-                        data={"message": "Item excluído com sucesso"})
+        return Response(
+            status=status.HTTP_204_NO_CONTENT,
+            data={"message": "Item excluído com sucesso"},
+        )
 
 
 class ExerciceStatsView(APIView):
@@ -58,20 +61,22 @@ class ExerciceStatsView(APIView):
 
     def get(self, request) -> None:
         try:
-            if request.method == 'GET':
+            if request.method == "GET":
                 total_exercise = self.queryset.count()
                 total_muscle = Muscle.objects.all().count()
                 exercises_by_muscle = self.queryset.values(
-                    'activated_muscle__name').annotate(
-                    number_of_muscle_recruiting_exercises=Count('id'))
-                return Response(data={'Total de Exercícios cadastrados':
-                                      total_exercise,
-                                      'Total de Músculos cadastrados':
-                                      total_muscle,
-                                      'Total de exercícios por músculos':
-                                      exercises_by_muscle,
-                                      },
-                                status=status.HTTP_200_OK)
+                    "activated_muscle__name"
+                ).annotate(number_of_muscle_recruiting_exercises=Count("id"))
+                return Response(
+                    data={
+                        "Total de Exercícios cadastrados": total_exercise,
+                        "Total de Músculos cadastrados": total_muscle,
+                        "Total de exercícios por músculos": exercises_by_muscle,
+                    },
+                    status=status.HTTP_200_OK,
+                )
         except Exception as e:
-            return Response(data={'message': f'Erro ao carregar dados {str(e)}'},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                data={"message": f"Erro ao carregar dados {str(e)}"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )

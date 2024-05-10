@@ -9,7 +9,7 @@ class ExerciseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Exercise
-        fields = '__all__'
+        fields = "__all__"
 
     def validate_execution(self, value):
         url_validator = URLValidator()
@@ -17,8 +17,7 @@ class ExerciseSerializer(serializers.ModelSerializer):
         try:
             url_validator(value)
         except ValidationError:
-            raise serializers.ValidationError(
-                'A string fornecida não é uma URL')
+            raise serializers.ValidationError("A string fornecida não é uma URL")
 
         return value
 
@@ -28,4 +27,9 @@ class ExerciseListStyleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Exercise
-        fields = ('id', 'name', 'activated_muscle', 'execution',)
+        fields = (
+            "id",
+            "name",
+            "activated_muscle",
+            "execution",
+        )

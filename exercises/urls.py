@@ -13,4 +13,5 @@ urlpatterns = [
         ExerciseRetrieveUpdateDestroyView.as_view(),
         name="exercise_retrieve_update_destroy",
     ),
+    path("exercice/stats", ExerciceStatsView.as_view(), name="stats_exercises")
 ]

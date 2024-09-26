@@ -1,0 +1,33 @@
+name: CI/CD pipeline
+
+#Especifica os eventos que disparam o workflow
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    #Especifica que o job deve ser executado em uma máquina virtual com o sistema operacional Ubuntu na versão mais recente.
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checando o código
+      uses: actions/checkout@v2
+
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        python -m venv venv
+        . venv/bin/activate
+        pip install -r requirements.txt
+        pip install pytest pytest-flask
+
+    - name: Run tests
+      run: |
+        . venv/bin/activate
+        pytest --ds=app.settings

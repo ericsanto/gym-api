@@ -37,4 +37,25 @@ class MuscleAPITest(APITestCase):
         self.assertEqual(Muscle.objects.count(), 1)
         self.assertEqual(Muscle.objects.get().name, "Peito")
 
-    
+    def test_get_muscle(self):
+        self.test_create_muscle()
+        response = self.client.get(
+            self.url
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Muscle.objects.get().name, self.muscle_data["name"])
+        
+    def test_put_muscle(self):
+        self.test_create_muscle()
+        self.att_muscle = "Peito LAAAATERAAAAAAL"
+        response = self.client.put(
+            f'{self.url}1/', {
+                "name": self.att_muscle
+            },
+            format='json',
+            HTTP_AUTHORIZATION=f'Bearer {self.token}'
+        )
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        updated_muscle = Muscle.objects.get(id=1).name
+        self.assertEqual(updated_muscle, self.att_muscle)

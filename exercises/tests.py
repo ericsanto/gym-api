@@ -26,7 +26,7 @@ class MuscleAPITest(APITestCase):
         })
         print(response.data["refresh"])
         return response.data["access"]
-    
+        
 class ExerciseAPITest(APITestCase):
     
     def setUp(self):
@@ -52,7 +52,7 @@ class ExerciseAPITest(APITestCase):
         })
         
         if response.status_code == 200:
-        return response.data["access"]
+            return response.data["access"]
     
     def test_create_exercise(self):
         response = self.client.post(

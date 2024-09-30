@@ -24,9 +24,8 @@ class MuscleAPITest(APITestCase):
             "username": "eric",
             "password": "12345"
         })
+        print(response.data["refresh"])
         return response.data["access"]
-    
-    
     
 class ExerciseAPITest(APITestCase):
     
@@ -46,13 +45,14 @@ class ExerciseAPITest(APITestCase):
                             ]
         }
         
-    def get_token(self):
+    def get_token(self) -> dict:
         response = self.client.post("/api/v1/authentication/token/", {
             "username":"eric",
             "password":"12345"
         })
+        
+        if response.status_code == 200:
         return response.data["access"]
-    
     
     def test_create_exercise(self):
         response = self.client.post(

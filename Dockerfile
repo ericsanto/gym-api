@@ -1,17 +1,31 @@
-FROM python:3.12
+# Etapa de build
+FROM python:3.12-alpine AS builder
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-RUN apt-get update && \
-    apt-get upgrade -y
+# Instala dependências necessárias para compilar bibliotecas
+RUN apk add --update --virtual .build-deps \
+    build-base \
+    postgresql-dev \
+    python3-dev \
+    libpq
 
-COPY requirements.txt ./
+# Copia as dependências do projeto
+COPY requirements.txt requirements.txt
+# Instala as dependências do Python no diretório temporário
+RUN pip install --prefix=/install -r requirements.txt
 
-RUN pip install --upgrade pip && \
-    pip install -r requirements.txt
+# Etapa final
+FROM python:3.12-alpine
 
-COPY . ./
+# Instala apenas as dependências de runtime (libpq)
+RUN apk add --no-cache libpq
 
+WORKDIR /app
+
+# Copia as dependências instaladas no estágio de build
+COPY --from=builder /install /usr/local
+
+# Copia o código do projeto
+COPY . /app
 RUN chmod +x entrypoint.sh
-
-CMD [ "./entrypoint.sh" ]

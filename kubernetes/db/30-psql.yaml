@@ -12,6 +12,8 @@ spec:
       labels:
         app: psql-app
     spec:
+      securityContext:
+        readOnlyRootFilesystem: true
       containers:
       - name: psql-container
         image: postgres:latest

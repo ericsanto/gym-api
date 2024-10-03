@@ -1,6 +1,5 @@
 services:
   web:
     build: .
-    command: ./entrypoint.sh
     ports:
       - 8000:8000

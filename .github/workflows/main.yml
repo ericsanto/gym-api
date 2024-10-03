@@ -36,7 +36,7 @@ jobs:
     - name: Hadolint test
       uses: hadolint/hadolint-action@v3.1.0
       with:
-        dockerfile: 
+        dockerfile: Dockerfile
         config: .hadolint.yml
       continue-on-error: false
     

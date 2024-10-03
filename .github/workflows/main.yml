@@ -37,7 +37,6 @@ jobs:
       with:
         dockerfile: Dockerfile
         config: .hadolint.yml
-      continue-on-error: false
 
     - name: Install Trivy
       run: |
@@ -48,8 +47,7 @@ jobs:
     - name: Run Trivy vulnerability scanner:2.0
       run: |
         trivy fs --scanners vuln,secret,misconfig --severity HIGH,CRITICAL Dockerfile
-      continue-on-error: false
-
+        
     - name: Set up Docker build
       uses: docker/setup-buildx-action@v3
       

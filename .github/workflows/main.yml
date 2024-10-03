@@ -38,13 +38,6 @@ jobs:
         dockerfile: Dockerfile
         config: .hadolint.yml
       continue-on-error: false
-    
-    - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@0.20.0
-      with: 
-        severity: 'CRITICAL, HIGH, MEDIUM'
-        format: 'json'
-        image-ref: Dockerfile
 
     - name: Install Trivy
       run: |

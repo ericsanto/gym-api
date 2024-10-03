@@ -32,7 +32,6 @@ jobs:
         . venv/bin/activate
         python manage.py test
 
-    
     - name: Hadolint test
       uses: hadolint/hadolint-action@v3.1.0
       with:
@@ -45,8 +44,7 @@ jobs:
       with: 
         severity: 'CRITICAL, HIGH, MEDIUM'
         format: 'json'
-        command: 'fs'
-        path: 'Dockerfile'
+        image-ref: Dockerfile
 
     - name: Install Trivy
       run: |

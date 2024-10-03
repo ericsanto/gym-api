@@ -32,18 +32,21 @@ jobs:
         . venv/bin/activate
         python manage.py test
 
+    
     - name: Hadolint test
       uses: hadolint/hadolint-action@v3.1.0
       with:
-        dockerfile: Dockerfile
+        dockerfile: 
         config: .hadolint.yml
+      continue-on-error: false
     
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@0.20.0
       with: 
         severity: 'CRITICAL, HIGH, MEDIUM'
-        format: 'table'
-        image-ref: docker.io/eric096/gym-api:1.0
+        format: 'json'
+        command: 'fs'
+        path: 'Dockerfile'
 
     - name: Install Trivy
       run: |
@@ -53,7 +56,28 @@ jobs:
 
     - name: Run Trivy vulnerability scanner:2.0
       run: |
-        trivy image --scanners vuln,secret,misconfig --severity HIGH,CRITICAL docker.io/eric096/gym-api-verify:1.0
+        trivy fs --scanners vuln,secret,misconfig --severity HIGH,CRITICAL Dockerfile
+      continue-on-error: false
+
+    - name: Set up Docker build
+      uses: docker/setup-buildx-action@v3
+      
+    - name: Build image Docker
+      run: |
+        docker build -t ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:latest
+
+    - name: Docker login
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }} 
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    
+    - name: Push image Dockerhub
+      if: ${{ success() }}
+      run: |
+        docker push ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:latest
+      
+
 
 
     

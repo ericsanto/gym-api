@@ -43,7 +43,7 @@ jobs:
       with: 
         severity: 'CRITICAL, HIGH, MEDIUM'
         format: 'table'
-        image-ref: Dockerfile
+        image-ref: docker.io/eric096/gym-api:1.0
 
 
     

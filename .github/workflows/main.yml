@@ -44,6 +44,10 @@ jobs:
         severity: 'CRITICAL, HIGH, MEDIUM'
         format: 'table'
         image-ref: docker.io/eric096/gym-api:1.0
+        
+    - name: Run Trivy vulnerability scanner:2.0
+      run: |
+        trivy image --scanners vuln,secret,misconfig --severity HIGH,CRITICAL docker.io/eric096/gym-api:1.0
 
 
     

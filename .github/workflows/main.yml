@@ -45,9 +45,15 @@ jobs:
         format: 'table'
         image-ref: docker.io/eric096/gym-api:1.0
         
+    - name: Install Trivy
+      run: |
+        wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.29.0_Linux-64bit.tar.gz
+        tar zxvf trivy_0.29.0_Linux-64bit.tar.gz
+        sudo mv trivy /usr/local/bin/
+
     - name: Run Trivy vulnerability scanner:2.0
       run: |
-        trivy image --scanners vuln,secret,misconfig --severity HIGH,CRITICAL docker.io/eric096/gym-api:1.0
+        trivy image --scanners vuln,secret,misconfig --severity HIGH,CRITICAL docker.io/eric096/gym-api-verify:1.0
 
 
     
